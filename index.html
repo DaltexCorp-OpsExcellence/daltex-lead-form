@@ -22,6 +22,10 @@
   .brand span{color:var(--orange)}
   .hero h1{font-size:17px;font-weight:600;margin:12px 0 4px}
   .hero p{font-size:13px;color:#c3c9d6;margin:0}
+  .cobrand{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:12px}
+  .cobrand .div{width:1px;height:34px;background:rgba(255,255,255,.22)}
+  .ev-logo{display:none;background:#fff;border-radius:10px;padding:8px 12px;line-height:0}
+  .ev-logo img{display:block;max-height:46px;max-width:150px;width:auto;height:auto}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:16px;box-shadow:0 2px 10px rgba(31,42,68,.05)}
   .sec{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--orange);margin:2px 0 10px}
   .sec.mt{margin-top:22px}
@@ -56,7 +60,11 @@
 </head>
 <body>
   <div class="hero">
-    <div class="brand">DAL<span>TEX</span></div>
+    <div class="cobrand">
+      <div class="brand">DAL<span>TEX</span></div>
+      <div class="div" id="ev_div" style="display:none"></div>
+      <div class="ev-logo" id="ev_logo"><img id="ev_logo_img" alt="Event logo"/></div>
+    </div>
     <h1 id="title">Registration</h1>
     <p id="sub">Fresh produce, direct from Egypt.</p>
   </div>
@@ -155,6 +163,17 @@
   if(ev){ document.getElementById('sub').textContent=decodeURIComponent(ev); }
   if(!token){ document.getElementById('badlink').style.display='block'; return; }
   document.getElementById('form').style.display='block';
+
+  // pull the event name + logo from the campaign (by token) so the QR link can stay short (?c=token)
+  fetch(EP + '?c=' + encodeURIComponent(token)).then(function(r){ return r.json(); }).then(function(m){
+    if(!m || !m.ok) return;
+    if(m.name){ document.getElementById('sub').textContent = m.name; document.title = 'Daltex — ' + m.name; }
+    if(m.logo_url){
+      var im=document.getElementById('ev_logo_img');
+      im.onload=function(){ document.getElementById('ev_logo').style.display='inline-block'; document.getElementById('ev_div').style.display='block'; };
+      im.src=m.logo_url;
+    }
+  }).catch(function(){});
 
   // pill/chip visual toggles
   document.querySelectorAll('.opts').forEach(function(grp){
