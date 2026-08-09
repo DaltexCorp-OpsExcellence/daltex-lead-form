@@ -119,8 +119,9 @@
         <label class="chip"><input type="checkbox" value="Sweet Potato"/> Sweet Potato</label>
         <label class="chip"><input type="checkbox" value="Pumpkin"/> Pumpkin</label>
         <label class="chip"><input type="checkbox" value="Peanuts"/> Peanuts</label>
-        <label class="chip"><input type="checkbox" value="Other"/> Other</label>
+        <label class="chip"><input type="checkbox" id="prod_other_cb" value="Other"/> Other</label>
       </div>
+      <input type="text" id="products_other" placeholder="Which other products?" style="display:none;margin-top:8px"/>
 
       <div class="sec mt">Interests / requests</div>
       <label style="margin-top:0">Anything you’d like from Daltex</label>
@@ -167,6 +168,11 @@
     var cb=c.querySelector('input');
     cb.addEventListener('change',function(){ c.classList.toggle('on', cb.checked); });
   });
+  var otherCb=document.getElementById('prod_other_cb'), otherIn=document.getElementById('products_other');
+  otherCb.addEventListener('change',function(){
+    otherIn.style.display=otherCb.checked?'block':'none';
+    if(otherCb.checked){ otherIn.focus(); } else { otherIn.value=''; }
+  });
 
   var form=document.getElementById('form'), btn=document.getElementById('submit'), msg=document.getElementById('msg');
   function val(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
@@ -181,7 +187,7 @@
       exporter_type:radio('exporter_type'), importer_type:radio('importer_type'), type_other:val('type_other'),
       name:val('name'), role:val('role'), company:val('company'), phone:val('phone'), email:val('email'), country:val('country'),
       products_industries:val('products_industries'), trade_countries:val('trade_countries'), annual_quantity:val('annual_quantity'),
-      product_interest:products, notes:val('notes')
+      product_interest:products, products_other:val('products_other'), notes:val('notes')
     };
     btn.disabled=true; btn.textContent='Sending…';
     fetch(EP,{ method:'POST', headers:{'content-type':'application/json'},
