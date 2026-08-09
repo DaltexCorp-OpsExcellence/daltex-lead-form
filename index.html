@@ -206,7 +206,8 @@
       exporter_type:radio('exporter_type'), importer_type:radio('importer_type'), type_other:val('type_other'),
       name:val('name'), role:val('role'), company:val('company'), phone:val('phone'), email:val('email'), country:val('country'),
       products_industries:val('products_industries'), trade_countries:val('trade_countries'), annual_quantity:val('annual_quantity'),
-      product_interest:products, products_other:val('products_other'), notes:val('notes')
+      product_interest:products, products_other:val('products_other'), notes:val('notes'),
+      consent:!!(document.getElementById('consent')||{}).checked
     };
     btn.disabled=true; btn.textContent='Sending…';
     fetch(EP,{ method:'POST', headers:{'content-type':'application/json'},
